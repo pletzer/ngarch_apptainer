@@ -1,0 +1,192 @@
+BootStrap: docker
+From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
+
+%labels
+    Author alexander.pletzer@niwa.co.nz
+    Version 0.0.1
+
+%help
+    Build a portable environment for NG-ARCH
+
+#%startscript
+    # start the atd d
+    # service atd start
+
+%environment
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+%post
+
+    apt-get update && apt-get upgrade -y
+    apt-get install -y wget file vim subversion 
+    apt-get install -y liburi-perl m4 libxml-parser-perl psmisc
+    apt-get install -y python3-dev python3-pip python3-setuptools
+    apt-get install -y cmake make 
+    apt-get install -y g++ libopenmpi-dev
+
+    # # environment to build LFRic's dependencies
+    # export F90_VENDOR=PG
+    # export F90=nvfortran
+    # export CC=gcc
+    # export CXX=g++
+    # # need to choose the right mpi versions of the compilers
+    # export MPIF90=$EBROOTNVHPC/Linux_x86_64/24.3/comm_libs/12.3/hpcx/hpcx-2.17.1/ompi/bin/mpif90 # nvidia
+    # export MPICC=$EBROOTOPENMPI/bin/mpicc # /opt/nesi/CS400_centos7_bdw/OpenMPI/4.1.5-GCC-12.3.0/bin/mpicc # gnu
+    # export MPICXX=$EBROOTOPENMPI/bin/mpicxx # gnu g++
+    # export INSTALL_DIR=/usr/local
+    # mkdir -p $INSTALL_DIR
+    # export BUILD_DIR=/usr/local/build
+    # mkdir -p $BUILD_DIR
+
+    # # zlib
+    # version="1.3.1"
+    # cd $BUILD_DIR
+    # wget https://www.zlib.net/zlib-${version}.tar.gz
+    # tar xf zlib-${version}.tar.gz 
+    # cd zlib-${version}/
+    # mkdir build
+    # cd build/
+    # CC=$MPICC ../configure  --prefix=$INSTALL_DIR
+    # make && make install
+
+    # # hdf5
+    # version="1.10.7"
+    # major_version=$(echo $version | perl -ne 's/^(\d+)\.(\d+).*/$1.$2/;print;')
+    # version_no_dash=$(echo $version | perl -ne 's/\-\d+//;print;')
+    # cd $BUILD_DIR
+    # wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${major_version}/hdf5-${version_no_dash}/src/hdf5-${version}.tar.gz
+    # tar xf hdf5-${version}.tar.gz && cd hdf5-${version} && mkdir build && cd build
+    # #CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC FC=$MPIF90 CXX=MPICXX ../configure --prefix=$INSTALL_DIR --enable-shared --enable-fortran --enable-fortran2003 --enable-parallel
+    # FC=$MPIF90 CC=$MPICC CXX=$MPICXX cmake \
+    #         -DHDF5_ENABLE_PARALLEL=ON -DHDF5_BUILD_FORTRAN=ON -DHDF5_BUILD_CPP_LIB:BOOL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON \
+    #         -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
+    # make -j 8; make install
+
+    # # netcdf-c
+    # version="4.9.2"
+    # cd $BUILD_DIR
+    # wget https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz
+    # tar xf netcdf-c-${version}.tar.gz
+    # cd netcdf-c-${version}
+    # mkdir build
+    # cd build
+    # CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC CXX=$MPICXX FC=$MPIF90 \
+    #      ../configure --prefix=$INSTALL_DIR --disable-byterange
+    # make -j 4
+    # make install
+
+    # # netcdf-fortran
+    # version="4.6.1"
+    # cd $BUILD_DIR
+    # wget https://downloads.unidata.ucar.edu/netcdf-fortran/${version}/netcdf-fortran-${version}.tar.gz
+    # tar xf netcdf-fortran-${version}.tar.gz
+    # cd netcdf-fortran-${version}
+    # mkdir build
+    # cd build
+    # FC=$MPIF90 CC=$MPICC CXX=$MPICXX \
+    #     cmake -DCMAKE_PREFIX_PATH=$INSTALL_DIR -DENABLE_FORTRAN_TYPE_CHECKS=OFF \
+    #     -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
+    # make
+    # make install
+
+    # # netcdf-cxx
+    # version="4.3.1"
+    # cd $BUILD_DIR
+    # wget https://downloads.unidata.ucar.edu/netcdf-cxx/${version}/netcdf-cxx4-${version}.tar.gz
+    # tar xf netcdf-cxx4-${version}.tar.gz
+    # cd netcdf-cxx4-${version}
+    # mkdir build
+    # cd build
+    # LDFLAGS="-L$INSTALL_DIR/lib -lnetcdf -lhdf5_hl -lhdf5" CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" \
+    #         CXX=$MPICXX CC=$MPICC ../configure --prefix=$INSTALL_DIR
+    # make -j 4
+    # make install
+
+    # # yaxt
+    # version="0.9.0"
+    # cd $BUILD_DIR
+    # wget https://www.dkrz.de/redmine/attachments/download/498/yaxt-${version}.tar.gz
+    # tar -xzf yaxt-${version}.tar.gz
+    # cd yaxt-${version} && mkdir build && cd build
+    # ../configure --prefix=$INSTALL_DIR --with-idxtype=long \
+    #         CC=$MPICC FC="$MPIF90 -cpp" \
+    #         CFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" --without-regard-for-quality
+    # make && make install
+
+    # # xios
+    # # may want to set the revision to be the latest release
+    # # may want to check that the version support -180, 180 longitudes
+    # # need to have some perl packages installed, cpan URI:URL
+    # cd $BUILD_DIR
+    # svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS -r {2024-08-11}
+    # cd XIOS
+
+    # mv arch/arch-GCC_LINUX.env arch/arch-GCC_LINUX.env.bk
+    # cat > arch/arch-GCC_LINUX.env << EOF
+    # export HDF5_INC_DIR=$INSTALL_DIR/include
+    # export HDF5_LIB_DIR=$INSTALL_DIR/lib
+    # export NETCDF_INC_DIR=$NETCDF_DIR/include
+    # export NETCDF_LIB_DIR=$NETCDF_DIR/lib
+    # EOF
+
+    # mv arch/arch-GCC_LINUX.fcm arch/arch-GCC_LINUX.fcm.bk
+    # cat > arch/arch-GCC_LINUX.fcm << EOF
+    # %CCOMPILER      $MPICXX
+    # %FCOMPILER      $MPIF90
+    # %LINKER         $MPIF90
+
+    # %BASE_CFLAGS    -w -std=c++11 -D__XIOS_EXCEPTION
+    # %PROD_CFLAGS    -O3 -DBOOST_DISABLE_ASSERTS
+    # %DEV_CFLAGS     -g -O2 
+    # %DEBUG_CFLAGS   -g 
+
+    # %BASE_FFLAGS    -D__NONE__ 
+    # %PROD_FFLAGS    -O3
+    # %DEV_FFLAGS     -g -O2
+    # %DEBUG_FFLAGS   -g 
+
+    # %BASE_INC       -D__NONE__
+    # %BASE_LD        $EBROOTGCCCORE/lib64/libstdc++.so
+
+    # %CPP            cpp
+    # %FPP            cpp -P 
+    # %MAKE           make
+    # EOF
+
+    # # fix, need to case into std::string
+    # cp src/string_tools.hpp src/string_tools.hpp.ori
+    # sed -i 's/"$1"/std::string("$1")/' src/string_tools.hpp
+
+    # # fix 2, remove curl from the MPI library
+    # cp arch/arch-GCC_LINUX.path arch/arch-GCC_LINUX.path.ori
+    # sed -i 's/\-lcurl//' arch/arch-GCC_LINUX.path
+
+    # ./make_xios --full --arch GCC_LINUX --job 6
+
+    # # copy the files over
+    # mkdir -p $INSTALL_DIR/xios/lib
+    # cp lib/lib*.a $INSTALL_DIR/xios/lib
+    # mkdir -p $INSTALL_DIR/xios/include
+    # cp inc/*.mod $INSTALL_DIR/xios/include
+    # mkdir -p $INSTALL_DIR/xios/bin
+    # cp bin/* $INSTALL_DIR/xios/bin
+
+    # pFUnit
+    # does not yet support the nividia compilers
+
+    # Psyclone and Jinga2 are installed into a virtual environment via pip
+
+    # fcm 
+
+    # rose
+
+    # rosie has to be installed by hand since it requires a password
+
+
+
+
+
+
+
+
+
