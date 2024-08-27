@@ -14,6 +14,7 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
 
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+    export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/openmpi4/bin/:$PATH
 
 %post
 
@@ -21,22 +22,26 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     apt-get install -y wget file vim subversion 
     apt-get install -y liburi-perl m4 libxml-parser-perl psmisc
     apt-get install -y python3-dev python3-pip python3-setuptools
-    apt-get install -y cmake make 
+    apt-get install -y cmake make cmake-curses-gui
     apt-get install -y g++ libopenmpi-dev
 
-    # # environment to build LFRic's dependencies
-    # export F90_VENDOR=PG
-    # export F90=nvfortran
-    # export CC=gcc
-    # export CXX=g++
-    # # need to choose the right mpi versions of the compilers
-    # export MPIF90=$EBROOTNVHPC/Linux_x86_64/24.3/comm_libs/12.3/hpcx/hpcx-2.17.1/ompi/bin/mpif90 # nvidia
-    # export MPICC=$EBROOTOPENMPI/bin/mpicc # /opt/nesi/CS400_centos7_bdw/OpenMPI/4.1.5-GCC-12.3.0/bin/mpicc # gnu
-    # export MPICXX=$EBROOTOPENMPI/bin/mpicxx # gnu g++
-    # export INSTALL_DIR=/usr/local
-    # mkdir -p $INSTALL_DIR
-    # export BUILD_DIR=/usr/local/build
-    # mkdir -p $BUILD_DIR
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+    # environment to build LFRic's dependencies
+    export F90_VENDOR=PG
+    export F90=nvfortran
+    export CC=nvcc
+    export CXX=nvc++
+    # need to choose the right mpi versions of the compilers
+    export MPI_BINDIR=/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/openmpi4/bin/
+    export MPIF90=$MPI_BINDIR/mpif90 # nvidia
+    export MPICC=$MPI_BINDIR/mpicc
+    export MPICXX=$MPI_BINDIR/mpicxx
+
+    export INSTALL_DIR=/usr/local
+    mkdir -p $INSTALL_DIR
+    export BUILD_DIR=/usr/local/build
+    mkdir -p $BUILD_DIR
 
     # # zlib
     # version="1.3.1"
@@ -46,61 +51,61 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     # cd zlib-${version}/
     # mkdir build
     # cd build/
-    # CC=$MPICC ../configure  --prefix=$INSTALL_DIR
+    # CC=$MPICC ../configure  --prefix=$INSTALL_DIR --enable-shared
     # make && make install
 
-    # # hdf5
-    # version="1.10.7"
-    # major_version=$(echo $version | perl -ne 's/^(\d+)\.(\d+).*/$1.$2/;print;')
-    # version_no_dash=$(echo $version | perl -ne 's/\-\d+//;print;')
-    # cd $BUILD_DIR
-    # wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${major_version}/hdf5-${version_no_dash}/src/hdf5-${version}.tar.gz
-    # tar xf hdf5-${version}.tar.gz && cd hdf5-${version} && mkdir build && cd build
-    # #CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC FC=$MPIF90 CXX=MPICXX ../configure --prefix=$INSTALL_DIR --enable-shared --enable-fortran --enable-fortran2003 --enable-parallel
-    # FC=$MPIF90 CC=$MPICC CXX=$MPICXX cmake \
-    #         -DHDF5_ENABLE_PARALLEL=ON -DHDF5_BUILD_FORTRAN=ON -DHDF5_BUILD_CPP_LIB:BOOL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON \
-    #         -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
-    # make -j 8; make install
+    # hdf5
+    version="1.10.7"
+    major_version=$(echo $version | perl -ne 's/^(\d+)\.(\d+).*/$1.$2/;print;')
+    version_no_dash=$(echo $version | perl -ne 's/\-\d+//;print;')
+    cd $BUILD_DIR
+    wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${major_version}/hdf5-${version_no_dash}/src/hdf5-${version}.tar.gz
+    tar xf hdf5-${version}.tar.gz && cd hdf5-${version} && mkdir build && cd build
+    #CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC FC=$MPIF90 CXX=MPICXX ../configure --prefix=$INSTALL_DIR --enable-shared --enable-fortran --enable-fortran2003 --enable-parallel
+    FC=$MPIF90 CC=$MPICC CXX=$MPICXX cmake \
+            -DHDF5_ENABLE_PARALLEL=ON -DHDF5_BUILD_FORTRAN=ON -DHDF5_BUILD_CPP_LIB:BOOL=OFF -DHDF5_ENABLE_Z_LIB_SUPPORT=ON \
+            -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
+    make -j 8; make install
 
-    # # netcdf-c
-    # version="4.9.2"
-    # cd $BUILD_DIR
-    # wget https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz
-    # tar xf netcdf-c-${version}.tar.gz
-    # cd netcdf-c-${version}
-    # mkdir build
-    # cd build
-    # CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC CXX=$MPICXX FC=$MPIF90 \
-    #      ../configure --prefix=$INSTALL_DIR --disable-byterange
-    # make -j 4
-    # make install
+    # netcdf-c
+    version="4.9.2"
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz
+    tar xf netcdf-c-${version}.tar.gz
+    cd netcdf-c-${version}
+    mkdir build
+    cd build
+    CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" CC=$MPICC CXX=$MPICXX FC=$MPIF90 \
+         ../configure --prefix=$INSTALL_DIR --disable-byterange --disable-libxml2
+    make -j 4
+    make install
 
-    # # netcdf-fortran
-    # version="4.6.1"
-    # cd $BUILD_DIR
-    # wget https://downloads.unidata.ucar.edu/netcdf-fortran/${version}/netcdf-fortran-${version}.tar.gz
-    # tar xf netcdf-fortran-${version}.tar.gz
-    # cd netcdf-fortran-${version}
-    # mkdir build
-    # cd build
-    # FC=$MPIF90 CC=$MPICC CXX=$MPICXX \
-    #     cmake -DCMAKE_PREFIX_PATH=$INSTALL_DIR -DENABLE_FORTRAN_TYPE_CHECKS=OFF \
-    #     -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
-    # make
-    # make install
+    # netcdf-fortran
+    version="4.6.1"
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-fortran/${version}/netcdf-fortran-${version}.tar.gz
+    tar xf netcdf-fortran-${version}.tar.gz
+    cd netcdf-fortran-${version}
+    mkdir build
+    cd build
+    FC=$MPIF90 CC=$MPICC CXX=$MPICXX \
+        cmake -DCMAKE_PREFIX_PATH=$INSTALL_DIR -DENABLE_FORTRAN_TYPE_CHECKS=OFF \
+        -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_BUILD_TYPE=Release ..
+    make
+    make install
 
-    # # netcdf-cxx
-    # version="4.3.1"
-    # cd $BUILD_DIR
-    # wget https://downloads.unidata.ucar.edu/netcdf-cxx/${version}/netcdf-cxx4-${version}.tar.gz
-    # tar xf netcdf-cxx4-${version}.tar.gz
-    # cd netcdf-cxx4-${version}
-    # mkdir build
-    # cd build
-    # LDFLAGS="-L$INSTALL_DIR/lib -lnetcdf -lhdf5_hl -lhdf5" CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" \
-    #         CXX=$MPICXX CC=$MPICC ../configure --prefix=$INSTALL_DIR
-    # make -j 4
-    # make install
+    # netcdf-cxx
+    version="4.3.1"
+    cd $BUILD_DIR
+    wget https://downloads.unidata.ucar.edu/netcdf-cxx/${version}/netcdf-cxx4-${version}.tar.gz
+    tar xf netcdf-cxx4-${version}.tar.gz
+    cd netcdf-cxx4-${version}
+    mkdir build
+    cd build
+    LDFLAGS="-L$INSTALL_DIR/lib -lnetcdf -lhdf5_hl -lhdf5" CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" \
+            CXX=$MPICXX CC=$MPICC ../configure --prefix=$INSTALL_DIR
+    make -j 4
+    make install
 
     # # yaxt
     # version="0.9.0"
