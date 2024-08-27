@@ -107,74 +107,45 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     make -j 4
     make install
 
-    # # yaxt
-    # version="0.9.0"
-    # cd $BUILD_DIR
-    # wget https://www.dkrz.de/redmine/attachments/download/498/yaxt-${version}.tar.gz
-    # tar -xzf yaxt-${version}.tar.gz
-    # cd yaxt-${version} && mkdir build && cd build
-    # ../configure --prefix=$INSTALL_DIR --with-idxtype=long \
-    #         CC=$MPICC FC="$MPIF90 -cpp" \
-    #         CFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" --without-regard-for-quality
-    # make && make install
+    # yaxt
+    version="0.9.0"
+    cd $BUILD_DIR
+    wget https://www.dkrz.de/redmine/attachments/download/498/yaxt-${version}.tar.gz
+    tar -xzf yaxt-${version}.tar.gz
+    cd yaxt-${version} && mkdir build && cd build
+    ../configure --prefix=$INSTALL_DIR --with-idxtype=long \
+            CC=$MPICC FC="$MPIF90 -cpp" \
+            CFLAGS="-O3 -fPIC" CXXFLAGS="-O3 -fPIC" FCFLAGS="-O3 -fPIC" --without-regard-for-quality
+    make && make install
 
-    # # xios
-    # # may want to set the revision to be the latest release
-    # # may want to check that the version support -180, 180 longitudes
-    # # need to have some perl packages installed, cpan URI:URL
-    # cd $BUILD_DIR
-    # svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS -r {2024-08-11}
-    # cd XIOS
+    # xios
+    # may want to set the revision to be the latest release
+    # may want to check that the version support -180, 180 longitudes
+    # need to have some perl packages installed, cpan URI:URL
+    cd $BUILD_DIR
+    svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS -r {2024-08-11}
+    cd XIOS
 
-    # mv arch/arch-GCC_LINUX.env arch/arch-GCC_LINUX.env.bk
-    # cat > arch/arch-GCC_LINUX.env << EOF
-    # export HDF5_INC_DIR=$INSTALL_DIR/include
-    # export HDF5_LIB_DIR=$INSTALL_DIR/lib
-    # export NETCDF_INC_DIR=$NETCDF_DIR/include
-    # export NETCDF_LIB_DIR=$NETCDF_DIR/lib
-    # EOF
+    # copy the architecture settings
+    # there is no NVHPC_LINUX architecture, we pretend it's GCC_LINUX
+    for suffix in env fcm path; do
+        wget https://raw.githubusercontent.com/pletzer/ngarch_apptainer/main/packages/xios/arch-NVHPC_LINUX.${suffix}
+        mv arch-NVHPC_LINUX.${suffix} arch/arch-GCC_LINUX.${suffix}
+    done
 
-    # mv arch/arch-GCC_LINUX.fcm arch/arch-GCC_LINUX.fcm.bk
-    # cat > arch/arch-GCC_LINUX.fcm << EOF
-    # %CCOMPILER      $MPICXX
-    # %FCOMPILER      $MPIF90
-    # %LINKER         $MPIF90
+    # fix, need to cast into std::string
+    cp src/string_tools.hpp src/string_tools.hpp.ori
+    sed -i 's/"$1"/std::string("$1")/' src/string_tools.hpp
 
-    # %BASE_CFLAGS    -w -std=c++11 -D__XIOS_EXCEPTION
-    # %PROD_CFLAGS    -O3 -DBOOST_DISABLE_ASSERTS
-    # %DEV_CFLAGS     -g -O2 
-    # %DEBUG_CFLAGS   -g 
+    ./make_xios --full --arch GCC_LINUX --job 6
 
-    # %BASE_FFLAGS    -D__NONE__ 
-    # %PROD_FFLAGS    -O3
-    # %DEV_FFLAGS     -g -O2
-    # %DEBUG_FFLAGS   -g 
-
-    # %BASE_INC       -D__NONE__
-    # %BASE_LD        $EBROOTGCCCORE/lib64/libstdc++.so
-
-    # %CPP            cpp
-    # %FPP            cpp -P 
-    # %MAKE           make
-    # EOF
-
-    # # fix, need to case into std::string
-    # cp src/string_tools.hpp src/string_tools.hpp.ori
-    # sed -i 's/"$1"/std::string("$1")/' src/string_tools.hpp
-
-    # # fix 2, remove curl from the MPI library
-    # cp arch/arch-GCC_LINUX.path arch/arch-GCC_LINUX.path.ori
-    # sed -i 's/\-lcurl//' arch/arch-GCC_LINUX.path
-
-    # ./make_xios --full --arch GCC_LINUX --job 6
-
-    # # copy the files over
-    # mkdir -p $INSTALL_DIR/xios/lib
-    # cp lib/lib*.a $INSTALL_DIR/xios/lib
-    # mkdir -p $INSTALL_DIR/xios/include
-    # cp inc/*.mod $INSTALL_DIR/xios/include
-    # mkdir -p $INSTALL_DIR/xios/bin
-    # cp bin/* $INSTALL_DIR/xios/bin
+    # copy the files over
+    mkdir -p $INSTALL_DIR/xios/lib
+    cp lib/lib*.a $INSTALL_DIR/xios/lib
+    mkdir -p $INSTALL_DIR/xios/include
+    cp inc/*.mod $INSTALL_DIR/xios/include
+    mkdir -p $INSTALL_DIR/xios/bin
+    cp bin/* $INSTALL_DIR/xios/bin
 
     # pFUnit
     # does not yet support the nividia compilers
