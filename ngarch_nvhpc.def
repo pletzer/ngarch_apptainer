@@ -6,11 +6,10 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     Version 0.0.1
 
 %help
-    Build a portable environment for NG-ARCH
+    Build a portable environment for LFRic code development based on the NVIDIA compilers
 
-#%startscript
-    # start the atd d
-    # service atd start
+%startscript
+    . /usr/local/build/spack/share/spack/setup-env.sh
 
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -24,6 +23,7 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     apt-get install -y python3-dev python3-pip python3-setuptools
     apt-get install -y cmake make cmake-curses-gui
     apt-get install -y g++ libopenmpi-dev
+    apt-get install -y npm
 
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
@@ -42,6 +42,31 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     mkdir -p $INSTALL_DIR
     export BUILD_DIR=/usr/local/build
     mkdir -p $BUILD_DIR
+
+    # Install spack
+    cd $BUILD_DIR
+    git clone -c feature.manyFiles=true https://github.com/spack/spack.git
+    . spack/share/spack/setup-env.sh
+
+    # Installing Python packages
+    pip install psyclone
+
+    # Installing cylc
+    pip install cylc-flow
+    pip install cylc-uiserver
+    pip install cylc-rose metomi-rose
+
+    # mosrs, fcm, rose...
+    # Pretend we build a vagrant VM
+    git clone https://github.com/pletzer/metomi-vms.git /vagrant
+    cd /vagrant
+    echo "> Replacing vm -> apptainer in rose.conf files..."
+    for f in ./opt/metomi-site/etc/rose/rose.conf ./opt/metomi-site/etc/rose.conf.redhat ./opt/metomi-site/etc/rose.conf; do
+        sed -i 's/automatic\-options=SITE=vm/automatic\-options=SITE=apptainer/g' $f
+    done
+    cd /vagrant
+    echo "> Installing MOSRS..."
+    bash -x install.sh ubuntu 2204 mosrs
 
     # # zlib
     # version="1.3.1"
