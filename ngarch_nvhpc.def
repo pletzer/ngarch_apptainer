@@ -24,6 +24,7 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     apt-get install -y cmake make cmake-curses-gui
     apt-get install -y g++ libopenmpi-dev
     apt-get install -y npm
+    apt-get install -y libcurl4-openssl-dev
 
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
@@ -148,7 +149,7 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     # may want to check that the version support -180, 180 longitudes
     # need to have some perl packages installed, cpan URI:URL
     cd $BUILD_DIR
-    svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS -r {2024-08-11}
+    svn --non-interactive --trust-server-cert-failures="other,unknown-ca,cn-mismatch,expired" co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS -r {2024-08-11}
     cd XIOS
 
     # copy the architecture settings
