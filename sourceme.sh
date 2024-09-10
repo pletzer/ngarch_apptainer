@@ -26,9 +26,9 @@ export F90_VENDOR=PG
 export F90=nvfortran
 export CC=gcc
 export CXX=g++
-export MPIF90=$EBROOTNVHPC/Linux_x86_64/24.3/comm_libs/12.3/hpcx/hpcx-2.17.1/ompi/bin/mpif90 # nvidia
-export MPICC=$EBROOTOPENMPI/bin/mpicc # /opt/nesi/CS400_centos7_bdw/OpenMPI/4.1.5-GCC-12.3.0/bin/mpicc # gnu
-export MPICXX=$EBROOTOPENMPI/bin/mpicxx # gnu g++
+export MPIF90=mpif90 # nvidia
+export MPICC=mpicc # /opt/nesi/CS400_centos7_bdw/OpenMPI/4.1.5-GCC-12.3.0/bin/mpicc # gnu
+export MPICXX=mpicxx # gnu g++
 
 # lfric
 export CXX_RUNTIME_LIBRARY="stdc++ c++"
@@ -53,9 +53,13 @@ export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfg
 # must have a virtual env created with psyclone installed
 # with:
+# python3 -m venv venv
+# source venv/bin/activate
 # pip install Psyclone jinja2
 # rose picker needs to be cloned and installed by hand
-# 
+# svn co https://code.metoffice.gov.uk/svn/lfric/GPL-utilities/trunk rose-picker
+# cd rose-picker
+# pip3 install -e .
 source venv/bin/activate
 
 # to get rid of a strange error related to a runtime OpenMPI error
