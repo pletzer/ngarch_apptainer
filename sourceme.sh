@@ -15,7 +15,7 @@ export CPPFLAGS=-I$INSTALL_DIR/include
 export FFLAGS=-I$INSTALL_DIR/include
 export LDFLAGS=-L$INSTALL_DIR/lib
 
-export BUILD_DIR=${PWD}/build
+export BUILD_DIR=/usr/local
 
 # xios
 export NETCDF_DIR="$INSTALL_DIR"
@@ -39,8 +39,8 @@ export PATH=$INSTALL_DIR/bin:$PATH
 export FC=$F90
 export FPP="cpp -traditional-cpp"
 export LDMPI=$MPIF90
-export FFLAGS="-I$BUILD_DIR/XIOS/inc -I$INSTALL_DIR/include -I$INSTALL_DIR/mod -I/usr/local/include/ -I$MINT_DIR/mod "
-export LDFLAGS="-L$BUILD_DIR/XIOS/lib -L$INSTALL_DIR/lib"
+export FFLAGS="-I$BUILD_DIR/xios/include -I$INSTALL_DIR/include -I$INSTALL_DIR/mod "
+export LDFLAGS="-L$BUILD_DIR/xios/lib -L$INSTALL_DIR/lib"
 export CPPFLAGS="-I$INSTALL_DIR/include"
 export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$INSTALL_DIR/lib64:$LD_LIBRARY_PATH
 
