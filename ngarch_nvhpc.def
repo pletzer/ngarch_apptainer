@@ -18,17 +18,23 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
 %post
 
     apt-get update && apt-get upgrade -y
-    apt-get install -y wget file vim subversion 
+    apt-get install -y wget file vim subversion time
     apt-get install -y liburi-perl m4 libxml-parser-perl psmisc
-    apt-get install -y python3-dev python3-pip python3-setuptools
+    apt-get install -y python3-dev python3-pip python3-setuptools python3-venv
     apt-get install -y cmake make cmake-curses-gui
     apt-get install -y g++ libopenmpi-dev
     apt-get install -y npm
     apt-get install -y libcurl4-openssl-dev
 
+    # create links
+    ln -s /usr/bin/python3 /usr/bin/python
+
+    # cylc 8
+    pip3 install cylc-flow cylc-uiserver cylc-rose metomi-rose
+
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-    # environment to build LFRic's dependencies
+    # environment to build LFRic dependencies
     export F90_VENDOR=PG
     export F90=nvfortran
     export CC=nvcc
@@ -52,21 +58,16 @@ From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
     # Installing Python packages
     pip install psyclone
 
-    # Installing cylc
-    pip install cylc-flow
-    pip install cylc-uiserver
-    pip install cylc-rose metomi-rose
-
     # mosrs, fcm, rose...
     # Pretend we build a vagrant VM
-    git clone https://github.com/pletzer/metomi-vms.git /vagrant
+    git clone -b nocylc7 --single-branch https://github.com/pletzer/metomi-vms.git /vagrant
     cd /vagrant
     echo "> Replacing vm -> apptainer in rose.conf files..."
     for f in ./opt/metomi-site/etc/rose/rose.conf ./opt/metomi-site/etc/rose.conf.redhat ./opt/metomi-site/etc/rose.conf; do
         sed -i 's/automatic\-options=SITE=vm/automatic\-options=SITE=apptainer/g' $f
     done
     cd /vagrant
-    echo "> Installing MOSRS..."
+    echo "> Installing MOSRS, cylc..."
     bash -x install.sh ubuntu 2204 mosrs
 
     # # zlib
