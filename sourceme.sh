@@ -44,8 +44,8 @@ export LDFLAGS="-L$BUILD_DIR/XIOS/lib -L$INSTALL_DIR/lib"
 export CPPFLAGS="-I$INSTALL_DIR/include"
 export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$INSTALL_DIR/lib64:$LD_LIBRARY_PATH
 
-# need to access mpi.mod, on mahuika
-#export FFLAGS="-I$EBROOTNVHPC/Linux_x86_64/24.3/comm_libs/12.3/hpcx/hpcx-2.17.1/ompi/lib $FFLAGS"
+# need to access mpi.mod
+export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/12.5/openmpi4/openmpi-4.1.5/lib/ $FFLAGS"
 
 export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 
