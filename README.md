@@ -66,8 +66,8 @@ cd ..
 Check out and build LFRIC (you must have access to MetOffice code)
 ```
 Apptainer> cd $LFRIC_DIR
-Apptainer> svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/branches/dev/alexanderpletzer/r2409_vn1.1_nvfortran 
-Apptainer> cd applications/simple_diffusion
+Apptainer> svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/branches/dev/alexanderpletzer/r2409_vn1.1_nvfortran  lfric-r50707_nvfortran
+Apptainer> cd lfric-r50707_nvfortran/applications/simple_diffusion
 Apptainer> make build
 ```
 
@@ -75,7 +75,7 @@ Check out and build NGARCH (or another application)
 ```
 Apptainer> cd $LFRIC_DIR
 Apptainer> svn co https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/alexanderpletzer/r50707_nvfortran lfric-r50707_nvfortran
-Apptainer> cd applications/simple_diffusion
+Apptainer> cd lfric-r50707_nvfortran/applications/simple_diffusion
 Apptainer> make build
 ```
 
