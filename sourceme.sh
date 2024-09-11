@@ -45,7 +45,8 @@ export CPPFLAGS="-I$INSTALL_DIR/include"
 export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$INSTALL_DIR/lib64:$LD_LIBRARY_PATH
 
 # need to access mpi.mod
-export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/12.5/openmpi4/openmpi-4.1.5/lib/ $FFLAGS"
+#export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/12.5/openmpi4/openmpi-4.1.5/lib/ $FFLAGS"
+export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/11.8/hpcx/hpcx-2.14/ompi/lib/ $FFLAGS"
 
 export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 
@@ -60,6 +61,8 @@ export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfg
 # svn co https://code.metoffice.gov.uk/svn/lfric/GPL-utilities/trunk rose-picker
 # cd rose-picker
 # pip3 install -e .
+# need to install cylc 
+# pip3 install cylc-flow cylc-uiserver cylc-rose metomi-rose
 source venv/bin/activate
 
 # to get rid of a strange error related to a runtime OpenMPI error
