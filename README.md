@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repo contains a definition file that allows one to build an Apptainer container. Included are compilers, 
+This repo contains a definition file that allows one to build an Apptainer container. Included in the container are compilers, 
 libraries and tools required to build LFRic.
 
 ## Requirements
