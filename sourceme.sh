@@ -53,7 +53,7 @@ export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfg
 # must have a virtual env created with psyclone installed
 # with:
-# pip install Psyclone jinja2
+# pip3 install Psyclone jinja2
 # rose picker needs to be cloned and installed by hand
 # 
 source venv/bin/activate
