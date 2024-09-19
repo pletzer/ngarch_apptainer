@@ -61,19 +61,24 @@ pip3 install -e .
 cd ..
 ```
 
+Cache your MOSRS password
+```
+Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
+```
+
 Check out and build LFRIC (you must have access to MetOffice code)
 ```
-Apptainer> cd $LFRIC_DIR
-Apptainer> svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/branches/dev/alexanderpletzer/r2409_vn1.1_nvfortran  lfric-r50707_nvfortran
-Apptainer> cd lfric-r50707_nvfortran/applications/simple_diffusion
+Apptainer> cd $CODE_DIR
+Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric-4411
+Apptainer> cd lfric-4411/applications/simple_diffusion
 Apptainer> make build
 ```
 
 Check out and build NGARCH (or another application)
 ```
-Apptainer> cd $LFRIC_DIR
-Apptainer> svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/branches/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-r2409
-Apptainer> cd lfric_apps-r2409/applications/ngarch
+Apptainer> cd $CODE_DIR
+Apptainer> fcm co fcm:lfric_apps.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-301
+Apptainer> cd lfric_apps-301/applications/ngarch
 Apptainer> make build
 ```
 
