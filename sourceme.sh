@@ -1,13 +1,14 @@
-# July 2024
+# Loosely based on
 # https://code.metoffice.gov.uk/trac/lfric/wiki/LFRicTechnical/MacOSXBuild
 
-export LFRIC_DIR=${PWD}
+export CODE_DIR=${PWD}/code
+
 # ADJUST
 #svn co https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/alexanderpletzer/r50707_nvfortran
-export CORE_ROOT_DIR=${PWD}/lfric-r50707_nvfortran/
+export CORE_ROOT_DIR=${CODE_DIR}/lfric-4411
 #svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk/
 #export APPS_ROOT_DIR=${PWD}/lfric_apps/
-export APPS_ROOT_DIR=${PWD}/lfric_apps-r2409
+export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-301
 
 export INSTALL_DIR=/usr/local
 export PATH=$INSTALL_DIR/bin:$PATH
@@ -50,8 +51,12 @@ export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/11.8/hpcx/hpcx-
 
 export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 
+export APPTAINER_BINDPATH="/opt/niwa/um_sys/,$PWD,/nesi/project/uoo03538/um/metoffice-science-repos"
+export SINGULARITY_BINDPATH=$APPTAINER_BINDPATH
+
 # Psyclone. Must create a virtual environment
-export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfg
+#export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfga
+export PSYCLONE_CONFIG=${PWD}/lfric-r50707_nvfortran/etc/psyclone.cfg
 # must have a virtual env created with psyclone installed
 # with:
 # pip3 install Psyclone jinja2
