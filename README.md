@@ -69,7 +69,7 @@ Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
 Check out and build LFRIC (you must have access to MetOffice code)
 ```
 Apptainer> cd $CODE_DIR
-Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric-4411
+Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r50707_nvfortran lfric-4411
 Apptainer> cd lfric-4411/applications/simple_diffusion
 Apptainer> make build
 ```
