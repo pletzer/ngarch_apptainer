@@ -1,14 +1,14 @@
 # Loosely based on
 # https://code.metoffice.gov.uk/trac/lfric/wiki/LFRicTechnical/MacOSXBuild
 
-export CODE_DIR=${PWD}/code
+export CODE_DIR=${PWD}
 
 # ADJUST
 #svn co https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/alexanderpletzer/r50707_nvfortran
 export CORE_ROOT_DIR=${CODE_DIR}/lfric-4411
 #svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk/
 #export APPS_ROOT_DIR=${PWD}/lfric_apps/
-export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-301
+export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-357
 
 export INSTALL_DIR=/usr/local
 export PATH=$INSTALL_DIR/bin:$PATH
