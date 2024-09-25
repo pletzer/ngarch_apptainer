@@ -71,7 +71,7 @@ Check out and build LFRIC (you must have access to MetOffice code)
 Apptainer> cd $CODE_DIR
 Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r50707_nvfortran lfric-4411
 Apptainer> cd lfric-4411/applications/simple_diffusion
-Apptainer> make build
+Apptainer> make clean && make build
 ```
 
 Check out and build NGARCH (or another application)
@@ -79,7 +79,7 @@ Check out and build NGARCH (or another application)
 Apptainer> cd $CODE_DIR
 Apptainer> fcm co fcm:lfric_apps.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-301
 Apptainer> cd lfric_apps-301/applications/ngarch
-Apptainer> make build
+Apptainer> make clean && make build
 ```
 
 To run the NGARCH app
