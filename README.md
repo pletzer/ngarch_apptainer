@@ -50,35 +50,34 @@ Load the environment
 Apptainer> source sourceme.sh
 ```
 
-Create a virtual environment, activate it and install Python packages
-```
-python3 -m venv venv
-source venv/bin/activate
-pip3 install Psyclone jinja2 cylc-flow cylc-uiserver cylc-rose metomi-rose
-svn co https://code.metoffice.gov.uk/svn/lfric/GPL-utilities/trunk rose-picker
-cd rose-picker
-pip3 install -e .
-cd ..
-```
-
 Cache your MOSRS password
 ```
 Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
 ```
 
-Check out and build LFRIC (you must have access to MetOffice code)
+Check out `lfric` and `lfric_apps` (you must have access to MetOffice code). For instance,
 ```
 Apptainer> cd $CODE_DIR
 Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r50707_nvfortran lfric-4411
-Apptainer> cd lfric-4411/applications/simple_diffusion
-Apptainer> make clean && make build
+Apptainer> fcm co fcm:lfric_apps.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-357
 ```
 
-Check out and build NGARCH (or another application)
+Check that
 ```
-Apptainer> cd $CODE_DIR
-Apptainer> fcm co fcm:lfric_apps.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-301
-Apptainer> cd lfric_apps-301/applications/ngarch
+Apptainer> echo $CORE_ROOT_DIR
+Apptainer> echo $APPS_ROOT_DIR
+```
+point to the `lfric` and `lfric_apps` directories (`lfric-4411` and `lfric_apps-357`, repectively).
+
+Build `lfric`
+```
+Apptainer: cd $CORE_ROOT_DIR/applications/simple_diffusion
+Apptainer: make clean && make build
+```
+
+Build `ngarch`
+```
+Apptainer> cd $APPS_ROOT_DIR/applications/ngarch
 Apptainer> make clean && make build
 ```
 
