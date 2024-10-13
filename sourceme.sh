@@ -1,6 +1,9 @@
 # Loosely based on
 # https://code.metoffice.gov.uk/trac/lfric/wiki/LFRicTechnical/MacOSXBuild
 
+# get rid of some perl messages
+unset LANG
+
 export CODE_DIR=${PWD}
 
 # ADJUST
