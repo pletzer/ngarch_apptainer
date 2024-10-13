@@ -1,5 +1,8 @@
 BootStrap: docker
-From: nvcr.io/nvidia/nvhpc:24.9-devel-cuda_multi-ubuntu22.04
+From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
+
+%arguments
+    NVHPC_VERSION=24.9
 
 %labels
     Author alexander.pletzer@niwa.co.nz
@@ -13,7 +16,7 @@ From: nvcr.io/nvidia/nvhpc:24.9-devel-cuda_multi-ubuntu22.04
 
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-    export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/24.9/comm_libs/openmpi4/bin/:$PATH
+    export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/openmpi4/bin/:$PATH
 
 %post
 
@@ -40,7 +43,7 @@ From: nvcr.io/nvidia/nvhpc:24.9-devel-cuda_multi-ubuntu22.04
     export CC=nvcc
     export CXX=nvc++
     # need to choose the right mpi versions of the compilers
-    export MPI_BINDIR=/opt/nvidia/hpc_sdk/Linux_x86_64/24.9/comm_libs/openmpi4/bin/
+    export MPI_BINDIR=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/openmpi4/bin/
     export MPIF90=$MPI_BINDIR/mpif90 # nvidia
     export MPICC=$MPI_BINDIR/mpicc
     export MPICXX=$MPI_BINDIR/mpicxx
@@ -137,7 +140,7 @@ From: nvcr.io/nvidia/nvhpc:24.9-devel-cuda_multi-ubuntu22.04
     # yaxt
     version="0.9.0"
     cd $BUILD_DIR
-    wget https://www.dkrz.de/redmine/attachments/download/498/yaxt-${version}.tar.gz
+    wget https://swprojects.dkrz.de/redmine/attachments/download/498/yaxt-${version}.tar.gz
     tar -xzf yaxt-${version}.tar.gz
     cd yaxt-${version} && mkdir build && cd build
     ../configure --prefix=$INSTALL_DIR --with-idxtype=long \
