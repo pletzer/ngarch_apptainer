@@ -13,7 +13,7 @@ You must have Apptainer (previously known as Singularity) installed.
 
 Under Linux
 ```
-sudo apptainer build ngarch_nvhpc.sif ngarch_nvhpc.def
+sudo apptainer build --build-arg NVHPC_VERSION="24.9" ngarch_nvhpc.sif ngarch_nvhpc.def
 ```
 
 ## Initial setup
