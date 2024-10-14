@@ -88,10 +88,3 @@ Apptainer> ../bin/ngarch configuration.nml
 ```
 
 
-## Updating the definition file
-
-The NVIDIA compiler version (eg 24.7) can be updated by editing the entry 
-```
-From: nvcr.io/nvidia/nvhpc:24.7-devel-cuda_multi-ubuntu22.04
-```
-in `ngarch_nvhpc.def`.
