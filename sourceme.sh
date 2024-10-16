@@ -50,7 +50,7 @@ export LD_LIBRARY_PATH=$INSTALL_DIR/lib:$INSTALL_DIR/lib64:$LD_LIBRARY_PATH
 
 # need to access mpi.mod
 #export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/12.5/openmpi4/openmpi-4.1.5/lib/ $FFLAGS"
-export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.9/comm_libs/11.8/hpcx/hpcx-2.14/ompi/lib/ $FFLAGS"
+export FFLAGS="-I$MPI_INC_DIR $FFLAGS"
 
 export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 
