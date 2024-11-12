@@ -38,7 +38,16 @@ From: gcc:latest
 
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-    # NEED TO BUILD MPI
+    export INSTALL_DIR=/usr/local
+    mkdir -p $INSTALL_DIR
+    export BUILD_DIR=/usr/local/build
+    mkdir -p $BUILD_DIR
+
+    # OpenMPI
+    cd $BUILD_DIR
+    version="5.0.5"
+    wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-${version}.tar.bz2
+    tar xf openmpi-${version}.tar.bz2
 
     # # environment to build LFRic dependencies
     # export F90_VENDOR=PG
@@ -50,10 +59,6 @@ From: gcc:latest
     # export MPICC=$MPI_BINDIR/mpicc
     # export MPICXX=$MPI_BINDIR/mpicxx
 
-    # export INSTALL_DIR=/usr/local
-    # mkdir -p $INSTALL_DIR
-    # export BUILD_DIR=/usr/local/build
-    # mkdir -p $BUILD_DIR
 
     # # Install spack
     # cd $BUILD_DIR
