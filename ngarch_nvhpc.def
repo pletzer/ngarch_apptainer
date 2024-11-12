@@ -3,6 +3,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 
 %arguments
     NVHPC_VERSION=24.9
+    NVIDIA_VERSION=11.8
 
 %labels
     Author alexander.pletzer@niwa.co.nz
@@ -17,6 +18,8 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 %environment
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
     export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/openmpi4/bin/:$PATH
+    # location of mpi.mod
+    export MPI_INC_DIR="/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/{{ NVIDIA_VERSION }}/hpcx/hpcx-2.14/ompi/lib/"
 
 %post
 
@@ -28,6 +31,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     apt-get install -y g++ libopenmpi-dev
     apt-get install -y npm
     apt-get install -y libcurl4-openssl-dev
+    apt-get install -y libzstd-dev
 
     # create links
     ln -s /usr/bin/python3 /usr/bin/python
