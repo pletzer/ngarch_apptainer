@@ -1,3 +1,4 @@
+
 # Loosely based on
 # https://code.metoffice.gov.uk/trac/lfric/wiki/LFRicTechnical/MacOSXBuild
 
@@ -8,10 +9,12 @@ export CODE_DIR=${PWD}
 
 # ADJUST
 #svn co https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/alexanderpletzer/r50707_nvfortran
-export CORE_ROOT_DIR=${CODE_DIR}/lfric-4411
+#export CORE_ROOT_DIR=${CODE_DIR}/lfric-trunk50869 
+export CORE_ROOT_DIR=${CODE_DIR}/lfric_r51107_371
 #svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk/
 #export APPS_ROOT_DIR=${PWD}/lfric_apps/
-export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-357
+#export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-357
+export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-r3191_3191_add_pc2_to_ngarch
 
 export INSTALL_DIR=/usr/local
 export PATH=$INSTALL_DIR/bin:$PATH
@@ -59,7 +62,8 @@ export SINGULARITY_BINDPATH=$APPTAINER_BINDPATH
 
 # Psyclone. Must create a virtual environment
 #export PSYCLONE_CONFIG=${PWD}/venv/share/psyclone/psyclone.cfga
-export PSYCLONE_CONFIG=${PWD}/lfric-r50707_nvfortran/etc/psyclone.cfg
+#export PSYCLONE_CONFIG=${PWD}/lfric-r50707_nvfortran/etc/psyclone.cfg
+export PSYCLONE_CONFIG=${CORE_ROOT_DIR}/etc/psyclone.cfg
 # must have a virtual env created with psyclone installed
 # with:
 # pip3 install Psyclone jinja2
@@ -77,3 +81,5 @@ source venv/bin/activate
 # to get rid of a strange error related to a runtime OpenMPI error
 # https://github.com/open-mpi/ompi/issues/7516
 #export PMIX_MCA_gds=hash
+
+

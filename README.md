@@ -41,8 +41,8 @@ Build the container if not already done.
 
 Start the container. On w-clim01,
 ```
-module load Singularity
-singularity shell -B/opt/niwa/um_sys/,$PWD,/opt/nesi,/nesi/project/uoo03538/um/ ngarch_nvhpc.sif
+module load Singularity CUDA
+singularity shell --nv -B/opt/niwa/um_sys/,$PWD,/opt/nesi,/nesi/project/uoo03538/um/ ngarch_nvhpc.sif
 ```
 
 Load the environment
