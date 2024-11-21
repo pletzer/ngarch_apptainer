@@ -2,7 +2,7 @@ BootStrap: docker
 From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 
 %arguments
-    NVHPC_VERSION=24.11
+    NVHPC_VERSION=24.9
     NVIDIA_VERSION=11.8
 
 %labels
