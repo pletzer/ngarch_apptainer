@@ -161,7 +161,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     cd XIOS
 
     # copy the architecture settings
-    # there is no NVHPC_LINUX architecture, we pretend it's GCC_LINUX
+    # there is no NVHPC_LINUX architecture, we pretend it is GCC_LINUX
     for suffix in env fcm path; do
         wget https://raw.githubusercontent.com/pletzer/ngarch_apptainer/main/packages/xios/arch-NVHPC_LINUX.${suffix}
         mv arch-NVHPC_LINUX.${suffix} arch/arch-GCC_LINUX.${suffix}
