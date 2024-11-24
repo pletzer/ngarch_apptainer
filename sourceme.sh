@@ -9,8 +9,8 @@ export CODE_DIR=${PWD}
 
 # ADJUST
 #svn co https://code.metoffice.gov.uk/svn/lfric/LFRic/branches/dev/alexanderpletzer/r50707_nvfortran
-#export CORE_ROOT_DIR=${CODE_DIR}/lfric-trunk50869 
-export CORE_ROOT_DIR=${CODE_DIR}/lfric_r51107_371
+export CORE_ROOT_DIR=${CODE_DIR}/lfric-trunk50869 
+#export CORE_ROOT_DIR=${CODE_DIR}/lfric_r51107_371
 #svn co https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk/
 #export APPS_ROOT_DIR=${PWD}/lfric_apps/
 #export APPS_ROOT_DIR=${CODE_DIR}/lfric_apps-357
