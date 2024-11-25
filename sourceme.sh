@@ -14,7 +14,7 @@ export APPS_ROOT_DIR=${CODE_DIR}/r3191_3191_add_pc2_to_ngarch
 export INSTALL_DIR=/usr/local
 export PATH=$INSTALL_DIR/bin:$PATH
 
-export FC=nvfortran FPP="cpp -P -x f95-cpp-input" FFLAGS="-I$INSTALL_DIR/include" LDFLAGS="-L$INSTALL_DIR/lib"
+export FC=nvfortran FPP="cpp -P -x f95-cpp-input" FFLAGS="-I$INSTALL_DIR/include" LDFLAGS="-L$INSTALL_DIR/lib -L/usr/local/xios/lib"
 
 # xios
 export NETCDF_DIR="$INSTALL_DIR"
@@ -31,7 +31,7 @@ export MPICXX=mpicxx
 
 # need to access mpi.mod
 #export FFLAGS="-I/opt/nvidia/hpc_sdk/Linux_x86_64/24.7/comm_libs/12.5/openmpi4/openmpi-4.1.5/lib/ $FFLAGS"
-export FFLAGS="-I$MPI_INC_DIR $FFLAGS"
+export FFLAGS="-I$MPI_INC_DIR $FFLAGS -I/usr/local/xios/include/"
 
 export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
 
