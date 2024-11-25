@@ -11,10 +11,12 @@ export CODE_DIR=${PWD}
 export CORE_ROOT_DIR=${CODE_DIR}/lfric-trunk50869 
 export APPS_ROOT_DIR=${CODE_DIR}/r3191_3191_add_pc2_to_ngarch
 
-export INSTALL_DIR=/usr/local
+export INSTALL_DIR="/usr/local"
 export PATH=$INSTALL_DIR/bin:$PATH
 
-export FC=nvfortran FPP="cpp -P -x f95-cpp-input" FFLAGS="-I$INSTALL_DIR/include" LDFLAGS="-L$INSTALL_DIR/lib -L/usr/local/xios/lib"
+export FC=nvfortran FPP="cpp -P -x f95-cpp-input" FFLAGS="-I${INSTALL_DIR}/include"
+export LDFLAGS="-L{$INSTALL_DIR}/lib -L/usr/local/xios/lib"
+export LDMPI="mpif90"
 
 # xios
 export NETCDF_DIR="$INSTALL_DIR"
