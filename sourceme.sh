@@ -8,7 +8,7 @@ unset LANG
 export CODE_DIR=${PWD}
 
 # ADJUST
-export CORE_ROOT_DIR=${CODE_DIR}/lfric-trunk50869 
+#export CORE_ROOT_DIR=/nesi/nobackup/pletzera/ngarch/ngarch_apptainer/r3191_3191_add_pc2_to_ngarch/applications/ngarch/working/lfric_core 
 export APPS_ROOT_DIR=${CODE_DIR}/r3191_3191_add_pc2_to_ngarch
 
 export INSTALL_DIR="/usr/local"
