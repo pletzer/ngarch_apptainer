@@ -9,7 +9,8 @@ export CODE_DIR=${PWD}
 
 # ADJUST
 #export CORE_ROOT_DIR=/nesi/nobackup/pletzera/ngarch/ngarch_apptainer/r3191_3191_add_pc2_to_ngarch/applications/ngarch/working/lfric_core 
-export APPS_ROOT_DIR=${CODE_DIR}/r3191_3191_add_pc2_to_ngarch
+#export APPS_ROOT_DIR=${CODE_DIR}/vn1.2_311_pc2_initiation # r3191_3191_add_pc2_to_ngarch
+export APPS_ROOT_DIR=${CODE_DIR}/r3191_3191_add_pc2_to_ngarch2
 
 export INSTALL_DIR="/usr/local"
 export PATH=$INSTALL_DIR/bin:$PATH
