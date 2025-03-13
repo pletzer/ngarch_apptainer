@@ -1,9 +1,10 @@
 BootStrap: docker
 From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/nvhpc
 
 %arguments
-    NVHPC_VERSION=24.11
-    NVIDIA_VERSION=12.6
+    NVHPC_VERSION=25.1
+    CUDA_VERSION=11.8
 
 %labels
     Author alexander.pletzer@niwa.co.nz
@@ -19,11 +20,14 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
     export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/openmpi4/bin/:$PATH
     # location of mpi.mod
-    export MPI_INC_DIR="/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/{{ NVIDIA_VERSION }}/hpcx/hpcx-2.14/ompi/lib/"
+    export MPI_INC_DIR="/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/{{ CUDA_VERSION }}/hpcx/hpcx-2.14/ompi/lib/"
+    export PATH=/root/.local/bin:$PATH
+
 
 %post
 
     apt-get update && apt-get upgrade -y
+    apt-get install -y gpg-agent
     apt-get install -y wget file vim subversion time
     apt-get install -y liburi-perl m4 libxml-parser-perl psmisc
     apt-get install -y python3-dev python3-pip python3-setuptools python3-venv
@@ -38,7 +42,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     ln -s /usr/bin/python3 /usr/bin/python
 
     # cylc 8
-    pip3 install cylc-flow cylc-uiserver cylc-rose metomi-rose
+    pip install cylc-flow cylc-uiserver cylc-rose metomi-rose
 
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
