@@ -3,8 +3,8 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 # https://catalog.ngc.nvidia.com/orgs/nvidia/containers/nvhpc
 
 %arguments
-    NVHPC_VERSION=25.1
-    CUDA_VERSION=11.8
+    NVHPC_VERSION=25.3
+    CUDA_VERSION=12.6
 
 %labels
     Author alexander.pletzer@niwa.co.nz
