@@ -3,7 +3,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 # https://catalog.ngc.nvidia.com/orgs/nvidia/containers/nvhpc
 
 %arguments
-    NVHPC_VERSION=25.1
+    NVHPC_VERSION=25.3
     CUDA_VERSION=11.8
 
 %labels
@@ -37,6 +37,14 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     apt-get install -y libcurl4-openssl-dev
     apt-get install -y libzstd-dev
     apt-get install -y valgrind
+
+    # java is required by TAU
+    apt-get install -y default-jre
+    apt-get install -y default-jdk
+    wget http://tau.uoregon.edu/tau.tgz
+    tar xf tau.tgz
+    cd tau-2.34
+    ./installtau -c++=nvc++ -fortran=nvfortran -mpi -openmp -openacc
 
     # create links
     ln -s /usr/bin/python3 /usr/bin/python
