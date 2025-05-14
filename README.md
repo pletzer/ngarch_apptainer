@@ -13,8 +13,9 @@ You must have Apptainer (previously known as Singularity) installed.
 
 Under Linux
 ```
-sudo apptainer build --build-arg NVHPC_VERSION="24.9" ngarch_nvhpc.sif ngarch_nvhpc.def
+apptainer build --build-arg NVHPC_VERSION="25.3" "NVIDIA_VERSION=12.6" ngarch_nvhpc.sif ngarch_nvhpc.def
 ```
+Note: depending on your installed version of apptainer  you may need to tun the above command under `sudo`.
 
 ## Initial setup
 
@@ -58,27 +59,13 @@ Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
 Check out `lfric` and `lfric_apps` (you must have access to MetOffice code). For instance,
 ```
 Apptainer> cd $CODE_DIR
-Apptainer> fcm co fcm:lfric.x_br/dev/alexanderpletzer/r50707_nvfortran lfric-4411
-Apptainer> fcm co fcm:lfric_apps.x_br/dev/alexanderpletzer/r2409_vn1.1_nvfortran lfric_apps-357
-```
-
-Check that
-```
-Apptainer> echo $CORE_ROOT_DIR
-Apptainer> echo $APPS_ROOT_DIR
-```
-point to the `lfric` and `lfric_apps` directories (`lfric-4411` and `lfric_apps-357`, repectively).
-
-Build `lfric`
-```
-Apptainer: cd $CORE_ROOT_DIR/applications/simple_diffusion
-Apptainer: make clean && make build
+Apptainer> fcm co fcm:lfric_apps.x_br/dev/jorgebornemann/vn2.0.1_311_pc2_checks lfric_apps
 ```
 
 Build `ngarch`
 ```
-Apptainer> cd $APPS_ROOT_DIR/applications/ngarch
-Apptainer> make clean && make build
+Apptainer> cd lfric_apps/build
+Apptainer> python local_build.py -a ngarch -j 20 -v -p minimum
 ```
 
 To run the NGARCH app
