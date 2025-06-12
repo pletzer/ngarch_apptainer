@@ -68,10 +68,19 @@ Apptainer> cd lfric_apps/build
 Apptainer> python local_build.py -a ngarch -j 20 -v -p minimum
 ```
 
+## How to run ngarch
+
 To run the NGARCH app
 ```
 Apptainer> cd example
 Apptainer> ../bin/ngarch configuration.nml
+```
+
+On the azure cluster, 
+```
+export OMP_NUM_THREADS=2
+export PMIX_MCA_gds=hash
+srun --partition=ncv5 --ntasks=6 apptainer exec --nv -B /data/users/alexander.pletzer <SIFFILE> ../bin/ngarch configuration.nml
 ```
 
 
