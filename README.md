@@ -46,11 +46,6 @@ module load Singularity CUDA
 singularity shell --nv -B/opt/niwa/um_sys/,$PWD,/opt/nesi,/nesi/project/uoo03538/um/ ngarch_nvhpc.sif
 ```
 
-Load the environment
-```
-Apptainer> source sourceme.sh
-```
-
 Cache your MOSRS password
 ```
 Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
