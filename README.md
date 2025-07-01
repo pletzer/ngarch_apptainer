@@ -46,11 +46,6 @@ module load Singularity CUDA
 singularity shell --nv -B/opt/niwa/um_sys/,$PWD,/opt/nesi,/nesi/project/uoo03538/um/ ngarch_nvhpc.sif
 ```
 
-Load the environment
-```
-Apptainer> source sourceme.sh
-```
-
 Cache your MOSRS password
 ```
 Apptainer> source /usr/local/bin/mosrs-setup-gpg-agent
@@ -68,10 +63,19 @@ Apptainer> cd lfric_apps/build
 Apptainer> python local_build.py -a ngarch -j 20 -v -p minimum
 ```
 
+## How to run ngarch
+
 To run the NGARCH app
 ```
 Apptainer> cd example
 Apptainer> ../bin/ngarch configuration.nml
+```
+
+On the azure cluster, 
+```
+export OMP_NUM_THREADS=2
+export PMIX_MCA_gds=hash
+srun --partition=ncv5 --ntasks=6 apptainer exec --nv -B /data/users/alexander.pletzer <SIFFILE> ../bin/ngarch configuration.nml
 ```
 
 
