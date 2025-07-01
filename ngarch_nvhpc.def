@@ -3,7 +3,7 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 # https://catalog.ngc.nvidia.com/orgs/nvidia/containers/nvhpc
 
 %arguments
-    NVHPC_VERSION=25.3
+    NVHPC_VERSION=25.5
     CUDA_VERSION=12.6
 
 %labels
@@ -17,11 +17,42 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     . /usr/local/build/spack/share/spack/setup-env.sh
 
 %environment
+
+    # set up the environment for the NVIDIA compilers
+    export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/compilers/bin:$PATH
+
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-    export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/openmpi4/bin/:$PATH
     # location of mpi.mod
     export MPI_INC_DIR="/opt/nvidia/hpc_sdk/Linux_x86_64/{{ NVHPC_VERSION }}/comm_libs/{{ CUDA_VERSION }}/hpcx/hpcx-2.14/ompi/lib/"
     export PATH=/root/.local/bin:$PATH
+
+    export INSTALL_DIR="/usr/local"
+    export PATH=$INSTALL_DIR/bin:$PATH
+    export FC=nvfortran 
+    export FPP="cpp -P -x f95-cpp-input"
+    export FFLAGS="-I${INSTALL_DIR}/include"
+    export LDFLAGS="-L{$INSTALL_DIR}/lib -L/usr/local/xios/lib"
+    export LDMPI="mpif90"
+
+    # xios
+    export NETCDF_DIR="$INSTALL_DIR"
+    export HDF5_DIR="$INSTALL_DIR"
+
+    # pFUnit
+    export F90_VENDOR=PG
+    export F90=$FC
+    export CC=nvcc
+    export CXX=nvc++
+    export MPIF90=mpif90
+    export MPICC=mpicc
+    export MPICXX=mpicxx
+
+    # need to access mpi.mod
+    export FFLAGS="-I$MPI_INC_DIR $FFLAGS -I/usr/local/xios/include/"
+
+    export EXTRA_NETCDF_LIBRARIES="hdf5_hl hdf5"
+
+    #. /usr/local/share/venv/bin/activate
 
 
 %post
@@ -38,13 +69,21 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     apt-get install -y libzstd-dev
     apt-get install -y valgrind
 
-    # java is required by TAU
-    apt-get install -y default-jre
-    apt-get install -y default-jdk
-    wget http://tau.uoregon.edu/tau.tgz
-    tar xf tau.tgz
-    cd tau-2.34
-    ./installtau -c++=nvc++ -fortran=nvfortran -mpi -openmp -openacc
+    # build vernier
+    git clone https://github.com/MetOffice/Vernier.git
+    cd Vernier 
+    mkdir build
+    cd build
+    cmake .. -DCMAKE_CXX_COMPILER=nvc++ -DCMAKE_C_COMPILER=nvc -DCMAKE_Fortran_COMPILER=nvfortran -DBUILD_TESTS=OFF -DBUILD_DOCS=OFF
+    make && make install
+
+    # # java is required by TAU
+    # apt-get install -y default-jre
+    # apt-get install -y default-jdk
+    # wget http://tau.uoregon.edu/tau.tgz
+    # tar xf tau.tgz
+    # cd tau-2.34
+    # ./installtau -c++=nvc++ -fortran=nvfortran -mpi -openmp -openacc
 
     # create links
     ln -s /usr/bin/python3 /usr/bin/python
@@ -75,8 +114,18 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
     git clone -c feature.manyFiles=true https://github.com/spack/spack.git
     . spack/share/spack/setup-env.sh
 
-    # Installing Python packages
-    pip install psyclone
+    # create virtual environment
+    #python3 -m venv /usr/local/share/venv
+    #. /usr/local/share/venv/bin/activate
+    #pip install Psyclone jinja2
+
+    # rose picker needs to be cloned and installed by hand as it reuires a password
+    #svn co https://code.metoffice.gov.uk/svn/lfric/GPL-utilities/trunk rose-picker
+    #cd rose-picker
+    #pip3 install -e .
+
+    # need to install cylc
+    #pip3 install cylc-flow cylc-uiserver cylc-rose metomi-rose
 
     # mosrs, fcm, rose...
     # Pretend we build a vagrant VM
@@ -196,14 +245,6 @@ From: nvcr.io/nvidia/nvhpc:{{ NVHPC_VERSION }}-devel-cuda_multi-ubuntu22.04
 
     # pFUnit
     # does not yet support the nividia compilers
-
-    # Psyclone and Jinga2 are installed into a virtual environment via pip
-
-    # fcm 
-
-    # rose
-
-    # rosie has to be installed by hand since it requires a password
 
 
 
